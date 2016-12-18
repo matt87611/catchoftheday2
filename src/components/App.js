@@ -21,16 +21,33 @@ class App extends React.Component {
   }
 
   componentWillMount() {
+    // this runs right before the app is rendered
     const storeIdStr = String(this.props.params.storeId);
     this.ref = base.syncState(storeIdStr + '/fishes'
               , {context: this,
                   state  : 'fishes'
                });
+
+    const localStoreageRef = localStorage.getItem('order-' + storeIdStr);
+
+    if(localStoreageRef != null) {
+      const storeIdObject = JSON.parse(localStoreageRef);
+      // update our app's order state
+      this.setState(
+        {order: storeIdObject}
+      )
+    }
   }
 
   componentWillUnmount() {
     // remove firebase listener
     base.removeBinding(this.ref);
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    const storeIdStr = String(this.props.params.storeId);
+    const nextOrderStr = JSON.stringify(nextState.order);
+    localStorage.setItem('order-' + storeIdStr, nextOrderStr);
   }
 
   addFish(fish) {
@@ -68,7 +85,7 @@ class App extends React.Component {
             {Object.keys(this.state.fishes).map(key => <Fish key={key} index={key} details={this.state.fishes[key]} addToOrder={this.addToOrder}/>)}
           </ul>
         </div>
-        <Order fishes={this.state.fishes} order={this.state.order}/>
+        <Order fishes={this.state.fishes} order={this.state.order} params={this.props.params}/>
         <Inventory addFish={this.addFish} loadSamples={this.loadSamples}/>
       </div>
     )
