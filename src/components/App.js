@@ -21,10 +21,10 @@ class App extends React.Component {
   }
 
   componentWillMount() {
-    //const storeIdStr = String(this.props.params.storeId);
-    this.ref = base.synState('${this.props.params.storeId}/fishes',
-               {context: this,
-                state  : 'fishes'
+    const storeIdStr = String(this.props.params.storeId);
+    this.ref = base.syncState(storeIdStr + '/fishes'
+              , {context: this,
+                  state  : 'fishes'
                });
   }
 
