@@ -1,9 +1,10 @@
-import React from 'react';
-import Header from './Header'
-import Order from './Order'
-import Inventory from './Inventory'
-import Fish from './Fish'
+import React        from 'react';
+import Header       from './Header'
+import Order        from './Order'
+import Inventory    from './Inventory'
+import Fish         from './Fish'
 import sampleFishes from '../sample-fishes';
+import base         from '../base';
 
 class App extends React.Component {
   constructor() {
@@ -17,6 +18,19 @@ class App extends React.Component {
       fishes: {},
       order:  {}
     }
+  }
+
+  componentWillMount() {
+    //const storeIdStr = String(this.props.params.storeId);
+    this.ref = base.synState('${this.props.params.storeId}/fishes',
+               {context: this,
+                state  : 'fishes'
+               });
+  }
+
+  componentWillUnmount() {
+    // remove firebase listener
+    base.removeBinding(this.ref);
   }
 
   addFish(fish) {
