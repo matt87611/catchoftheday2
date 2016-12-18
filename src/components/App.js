@@ -23,8 +23,9 @@ class App extends React.Component {
   componentWillMount() {
     // this runs right before the app is rendered
     const storeIdStr = String(this.props.params.storeId);
-    this.ref = base.syncState(storeIdStr + '/fishes'
-              , {context: this,
+    this.ref = base.syncState(storeIdStr + '/fishes',
+               {
+                  context: this,
                   state  : 'fishes'
                });
 
